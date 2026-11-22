@@ -1,6 +1,6 @@
 # Gestor de pedidos de material
 
-Práctica de integración de Desarrollo Web en Entorno Cliente (sesiones 8 a 13).
+Práctica de integración de Desarrollo Web en Entorno Cliente.
 Aplicación web que permite consultar un catálogo de material informático y de oficina, preparar un carrito y confirmar pedidos. Toda la lógica se ejecuta en el navegador con HTML, CSS y JavaScript, sin frameworks, sin backend y sin persistencia: al recargar la página se pierden los datos.
 
 ---
