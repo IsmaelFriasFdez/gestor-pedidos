@@ -1,0 +1,108 @@
+body {
+  font-family: sans-serif;
+  max-width: 70rem;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+  line-height: 1.4;
+}
+
+section {
+  border-top: 2px solid #ccc;
+  margin-top: 1.5rem;
+  padding-top: 0.5rem;
+}
+
+label {
+  display: block;
+  margin-top: 0.4rem;
+}
+
+fieldset label {
+  display: inline-block;
+  margin-right: 1rem;
+}
+
+.filtros {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.rejilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 1rem;
+}
+
+.tarjeta {
+  border: 1px solid #777;
+  border-radius: 4px;
+  padding: 0.8rem;
+}
+
+.tarjeta h3 {
+  margin-top: 0;
+}
+
+.tarjeta p {
+  margin: 0.2rem 0;
+}
+
+.tarjeta button {
+  margin-top: 0.5rem;
+}
+
+.agotado {
+  background: #f1f1f1;
+  color: #555;
+}
+
+.error {
+  display: block;
+  color: #9b1c1c;
+}
+
+[aria-invalid="true"] {
+  border: 2px solid #9b1c1c;
+}
+
+.oculto {
+  display: none;
+}
+
+.aviso-vacio {
+  font-style: italic;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 0.5rem 0;
+}
+
+th,
+td {
+  border: 1px solid #999;
+  padding: 0.3rem 0.6rem;
+  text-align: left;
+}
+
+.resumen {
+  display: grid;
+  grid-template-columns: max-content auto;
+  gap: 0.2rem 1rem;
+}
+
+.resumen dd {
+  margin: 0;
+  font-weight: bold;
+}
+
+.pedido {
+  border: 1px solid #777;
+  padding: 0.6rem;
+  margin: 0.6rem 0;
+}
+
+.pedido h3 {
+  margin: 0;
+}

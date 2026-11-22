@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestor de pedidos de material</title>
+  <!-- Icono vacío: evita la petición a /favicon.ico y el 404 en la consola -->
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/estilos.css">
+  <!-- Los scripts se cargan en este orden gracias a defer:
+       primero la clase, después la lógica pura, después la creación de nodos
+       y por último el estado de la aplicación y los eventos. -->
+  <script src="js/producto.js" defer></script>
+  <script src="js/logica.js" defer></script>
+  <script src="js/interfaz.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>Gestor de pedidos de material</h1>
+    <p>Consulta el catálogo, prepara tu carrito y confirma el pedido. Los datos se pierden al recargar la página.</p>
+  </header>
+
+  <main>
+    <!-- CATÁLOGO -->
+    <section id="seccion-catalogo" aria-labelledby="titulo-catalogo">
+      <h2 id="titulo-catalogo">Catálogo de productos</h2>
+
+      <div class="filtros">
+        <p>
+          <label for="buscar">Buscar por nombre</label>
+          <input id="buscar" type="search" maxlength="40">
+        </p>
+        <p>
+          <label for="filtro-categoria">Categoría</label>
+          <select id="filtro-categoria">
+            <option value="todas">Todas las categorías</option>
+            <!-- El resto de opciones se crean desde app.js a partir del catálogo -->
+          </select>
+        </p>
+      </div>
+
+      <p id="catalogo-estado" role="status"></p>
+      <div id="catalogo-lista" class="rejilla"></div>
+    </section>
+
+    <!-- CARRITO -->
+    <section id="seccion-carrito" aria-labelledby="titulo-carrito">
+      <h2 id="titulo-carrito">Carrito</h2>
+      <p id="carrito-aviso" role="status" aria-live="polite"></p>
+      <p id="carrito-vacio" class="aviso-vacio">El carrito está vacío. Añade productos desde el catálogo para poder confirmar un pedido.</p>
+
+      <table id="tabla-carrito" class="oculto">
+        <thead>
+          <tr>
+            <th scope="col">Producto</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Precio unitario</th>
+            <th scope="col">Subtotal</th>
+            <th scope="col">Acción</th>
+          </tr>
+        </thead>
+        <tbody id="carrito-lineas"></tbody>
+      </table>
+
+      <dl class="resumen">
+        <dt>Total de unidades</dt>
+        <dd id="resumen-unidades">0</dd>
+        <dt>Subtotal</dt>
+        <dd id="resumen-subtotal">0.00 €</dd>
+        <dt>Descuento (10 % desde 100 €)</dt>
+        <dd id="resumen-descuento">0.00 €</dd>
+        <dt>Total</dt>
+        <dd id="resumen-total">0.00 €</dd>
+      </dl>
+    </section>
+
+    <!-- FORMULARIO DEL PEDIDO -->
+    <section id="seccion-pedido" aria-labelledby="titulo-pedido">
+      <h2 id="titulo-pedido">Confirmar pedido</h2>
+
+      <form id="form-pedido" novalidate>
+        <p>
+          <label for="nombre">Nombre y apellidos (entre 2 y 60 caracteres)</label>
+          <input id="nombre" name="nombre" type="text" required minlength="2" maxlength="60"
+                 autocomplete="name" aria-describedby="e-nombre">
+          <small id="e-nombre" class="error" aria-live="polite"></small>
+        </p>
+
+        <p>
+          <label for="correo">Correo electrónico</label>
+          <input id="correo" name="correo" type="email" required maxlength="100"
+                 autocomplete="email" aria-describedby="e-correo">
+          <small id="e-correo" class="error" aria-live="polite"></small>
+        </p>
+
+        <fieldset aria-describedby="e-entrega">
+          <legend>Modalidad de entrega</legend>
+          <label>
+            <input id="entrega-recogida" name="entrega" type="radio" value="recogida" required>
+            Recogida en tienda
+          </label>
+          <label>
+            <input id="entrega-envio" name="entrega" type="radio" value="envio" required>
+            Envío a domicilio
+          </label>
+          <small id="e-entrega" class="error" aria-live="polite"></small>
+        </fieldset>
+
+        <!-- Solo se muestra y se exige cuando la modalidad es envío -->
+        <div id="bloque-envio" class="oculto">
+          <p>
+            <label for="direccion">Dirección (entre 5 y 100 caracteres)</label>
+            <input id="direccion" name="direccion" type="text" minlength="5" maxlength="100"
+                   autocomplete="street-address" aria-describedby="e-direccion" disabled>
+            <small id="e-direccion" class="error" aria-live="polite"></small>
+          </p>
+          <p>
+            <label for="cp">Código postal (5 cifras, provincia 01 a 52)</label>
+            <input id="cp" name="cp" type="text" inputmode="numeric" maxlength="5"
+                   autocomplete="postal-code" aria-describedby="e-cp" disabled>
+            <small id="e-cp" class="error" aria-live="polite"></small>
+          </p>
+        </div>
+
+        <p>
+          <label for="observaciones">Observaciones (opcional, máximo 200 caracteres)</label>
+          <textarea id="observaciones" name="observaciones" rows="3" cols="50" maxlength="200"
+                    aria-describedby="contador-observaciones e-observaciones"></textarea>
+          <small id="contador-observaciones" aria-live="polite">0 / 200 caracteres</small>
+          <small id="e-observaciones" class="error" aria-live="polite"></small>
+        </p>
+
+        <p>
+          <label>
+            <input id="acepta" name="acepta" type="checkbox" value="si" required aria-describedby="e-acepta">
+            Confirmo que los datos del pedido son correctos
+          </label>
+          <small id="e-acepta" class="error" aria-live="polite"></small>
+        </p>
+
+        <button type="submit" id="boton-confirmar" disabled>Confirmar pedido</button>
+      </form>
+
+      <p id="pedido-estado" role="status" aria-live="polite"></p>
+    </section>
+
+    <!-- HISTORIAL -->
+    <section id="seccion-historial" aria-labelledby="titulo-historial">
+      <h2 id="titulo-historial">Historial de pedidos</h2>
+
+      <p>
+        <label for="filtro-historial">Mostrar pedidos con modalidad</label>
+        <select id="filtro-historial">
+          <option value="todos">Todos</option>
+          <option value="recogida">Recogida</option>
+          <option value="envio">Envío</option>
+        </select>
+      </p>
+
+      <p id="historial-resumen"></p>
+      <p id="historial-vacio" class="aviso-vacio"></p>
+      <div id="historial-lista"></div>
+
+      <h3>Exportación</h3>
+      <p>
+        <button type="button" id="boton-exportar">Exportar historial</button>
+      </p>
+      <p>
+        <label for="salida-json">JSON del historial (puedes seleccionarlo y copiarlo)</label>
+        <textarea id="salida-json" rows="12" cols="70"></textarea>
+      </p>
+      <p id="exportacion-estado" role="status"></p>
+    </section>
+  </main>
+</body>
+</html>
